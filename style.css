@@ -164,3 +164,32 @@ h1 {
     background-image: url(../svc/ledgreen.svg);
     background-size: contain;
 }
+
+.playerMemory {
+    display: grid;
+    gap: 4%;
+    grid-template-columns: repeat(3, 31.3%);
+    grid-template-rows: repeat(3, 31.3%);
+    margin: 25px 0;
+    flex: 1;
+    width: 96%;
+    height: 100%;
+    padding: 5px;
+    border-radius: 1px;
+}
+
+.player_memory {
+    background: #686868;
+    box-shadow: 0px 0px 0px 4px rgb(10, 10, 10);
+    border: inset 4px #505050;
+    border-radius: 4px;
+    cursor: not-allowed;
+}
+
+.playerMemoryActive {
+    background: #c7c0c0;
+    box-shadow: 0px 0px 0px 4px rgb(10, 10, 10);
+    border: inset 4px #505050;
+    cursor: pointer;
+}
+
