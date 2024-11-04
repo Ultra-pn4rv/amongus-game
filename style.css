@@ -158,3 +158,9 @@ h1 {
         background: #44a8fe;
     }
 }
+
+.ledOn {
+    border: solid 5px #202020;
+    background-image: url(../svc/ledgreen.svg);
+    background-size: contain;
+}
