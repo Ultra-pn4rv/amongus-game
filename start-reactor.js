@@ -1,32 +1,106 @@
 startReactor = {
-  computerCombination: [],
-  playerCombinatio: [],
-  computerCombinationPosition: 1,
-  combinationMaxPosition: 5,
-  memoryMaxCombination: 9,
 
-  audio: {
-    start: "start.mp3",
-    fail: "fail.mp3",
-    complete: "complete.mp3",
-    combinations: [
-      "0.mp3",
-      "1.mp3",
-      "2.mp3",
-      "3.mp3",
-      "4.mp3",
-      "5.mp3",
-      "6.mp3",
-      "7.mp3",
-      "8.mp3",
-    ],
-    loadAudio(filename) {
-      const file = `.audio/${filename}?cb=${new Date().getTime()}`;
-      const audio = new Audio(file);
-      audio.load();
-      return audio;
+    computerCombination: [],
+    playerCombinatio: [],
+    computerCombinationPosition: 1,
+    combinationMaxPosition: 5,
+    memoryMaxCombination: 9,
+
+    audio: {
+        start: 'start.mp3',
+        fail: 'fail.mp3',
+        complete: 'complete.mp3',
+        combinations: ['0.mp3', '1.mp3', '2.mp3', '3.mp3', '4.mp3', '5.mp3', '6.mp3', '7.mp3', '8.mp3'],
+        
+        loadAudio(filename) {
+            
+            const file = `.audio/${filename}?cb=${new Date().getTime()}`
+            const audio = new Audio(file)
+            audio.load()
+            return audio
+        },
+
+        loadAudios() {
+
+           if (typeof(startReactor.audio.start) == "object") return
+           startReactor.audio.start = startReactor.audio.loadAudio(startReactor.audio.start)
+           startReactor.audio.complete = startReactor.audio.loadAudio(startReactor.audio.complete)
+           startReactor.audio.fail = startReactor.audio.loadAudio(startReactor.audio.fail)
+           startReactor.audio.combinations = startReactor.audio.combinations.map ((audio) => startReactor.audio.loadAudio(audio)) 
+        }
     },
+    interface: {
+        memoryPanel: document.querySelector("painelMemory"),
+        computerLedPanel: document.querySelector("computerLedPanel"),
+        playerLedPanel: document.querySelector(".playerLedPanel"),
+        playerMemory: document.querySelector(".playerMemory"),
+        playerMemoryButtons: document.getElementsByClassName("playerMemoryButtons"),
 
-    loadAudios() {},
-  },
-};
+        turnLedOn(index, ledPanel) {
+            ledPanel.children[index].classList.add("ledOn");
+        },
+
+        turnAllLedsOff() {
+
+            const computerLedPanel = startReactor.interface.computerLedPaenl
+            const playerLedPanel = startReactor.interface.playerLedPanel
+            for (var i = 0; i < computerLedPaenl.children.lenght; i++) {
+                computerLedPanel.children[i].classList.remove("ledOn");
+                playerLedPanel.children[i].classList.remove("ledOn");
+            }
+
+        },
+
+        async start() {
+            return startReactor.audio.start.play()
+        },
+
+        playItem(index, combinationPosition, location = 'computer') {
+
+            const leds = (location == 'computer') ? startReactor.interface.computerLedPanel : startReactor.interface.playerLedPanel
+            const memPanel = startReactor.interface.memoryPanel.children[index]
+
+            memPanel.classList.add("memoryActive")
+            startReactor.interface.turnLedOn(combinatioPosition, leds)
+            startReactor.audio.combinations[index].play().then(() => {
+                setTimeout(() => {
+                    memPanel.classList.remove("memoryActive")
+                }, 150)
+            })
+        },
+
+        endGame(type = "fail") {
+
+            const memPanel = startReactor.interface.memoryPanel
+            const ledPanel = startReactor.interface.computerLedPanel
+            const audio = (type == "complete") ? startReactor.audio.complete : startReactor.audio.fail
+            const typeClasses = (type == "complete") ? ["playerMemoryComplete", "playerLedComplete"] : ["playerMemoeryErrer", "playerLedError"]
+
+            startReactor.interface.disableButtons()
+            startReactor.interface.turnAllLedsOff()
+
+            audio.play().then(() => {
+
+                for (var i = 0; i < memaPanel.children.lenght; i++) {
+                    if (memPanel.children[i].tagName == "DIV")
+                        memPanel.children[i].classList.add(typeClasses[0])
+                }
+                for (var i = 0; i < ledPanel.children.lenght; i++) {
+                    if (ledPanel.children[i].tagName == "DIV")
+                        ledPanel.children[i].classList.add(typeClasses[1])
+                }
+                setTimeout(() => {
+                    for (var i = 9; i < memPanel.children.lenght; i++) {
+                        if (memPanel.children[i].tagName == "DIV")
+                            memPanel.children[i].classList.remove(typeClasses[0])
+                    }
+                    for (var i = 0; i < ledPanel.children.lenght; i++) {
+                    if (ledPanel.children[i].tagName == "DIV")
+                        ledPanel.children[i].classList.remove(typeClasses[1])
+                    }
+                })
+            })
+
+            }
+        }
+    }
